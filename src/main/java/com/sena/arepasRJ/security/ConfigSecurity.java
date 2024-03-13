@@ -6,6 +6,7 @@ import com.sena.arepasRJ.service.CustomerUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -49,7 +50,9 @@ public class ConfigSecurity extends WebSecurityConfigurerAdapter  {
                 .authorizeRequests()
                 .antMatchers("/api/admin/**").hasAuthority("ADMIN")
                 .antMatchers("/api/user/**").hasAuthority("USER")
-                .antMatchers("/**").permitAll()
+                .antMatchers("/login").permitAll() // Permitir acceso a la ruta de inicio de sesión
+                .antMatchers("/logout").permitAll() // Permitir acceso a la ruta de cierre de sesión
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Permitir peticiones OPTIONS en todas las rutas
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable()
@@ -60,8 +63,15 @@ public class ConfigSecurity extends WebSecurityConfigurerAdapter  {
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-        
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+                .logout() // Configurar el cierre de sesión
+                .logoutUrl("/api/logout")
+                .logoutSuccessHandler((request, response, authentication) -> {
+                    response.setStatus(HttpServletResponse.SC_OK);
+                })
+                .deleteCookies("JWT_TOKEN") // Eliminar cookies al cerrar sesión
+                .and()
+                .cors();
         http.cors();
     }
 
