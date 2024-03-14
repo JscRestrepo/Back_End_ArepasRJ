@@ -50,9 +50,7 @@ public class ConfigSecurity extends WebSecurityConfigurerAdapter  {
                 .authorizeRequests()
                 .antMatchers("/api/admin/**").hasAuthority("ADMIN")
                 .antMatchers("/api/user/**").hasAuthority("USER")
-                .antMatchers("/login").permitAll() // Permitir acceso a la ruta de inicio de sesión
-                .antMatchers("/logout").permitAll() // Permitir acceso a la ruta de cierre de sesión
-                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Permitir peticiones OPTIONS en todas las rutas
+                .antMatchers("/**").permitAll() // Permitir peticiones OPTIONS en todas las rutas
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable()
