@@ -1,8 +1,10 @@
 package com.sena.arepasRJ.controller;
 
+import com.sena.arepasRJ.entity.EntityCartItem;
 import com.sena.arepasRJ.entity.EntityDelivery;
 import com.sena.arepasRJ.entity.EntityShoppingCart;
 import com.sena.arepasRJ.exceptions.PersonalExceptions;
+import com.sena.arepasRJ.repository.RepositoryCartItems;
 import com.sena.arepasRJ.responses.Responses;
 import com.sena.arepasRJ.service.ServiceShoppingCart;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,12 +41,24 @@ public class ControllerShoppingCart {
     Método para completar los datos de la venta
      */
 
+    @Autowired
+    private RepositoryCartItems searchIdItem;
+
     @DeleteMapping("/deleteFromCart/{idProduct}")
     public ResponseEntity<?> deleteFromCart (@PathVariable Long idProduct) {
         try {
-            cartService.deleteFromCart(idProduct);
-            Responses deleteResponse = new Responses("Producto eliminado del carrito");
-            return new ResponseEntity<>(deleteResponse, HttpStatus.OK);
+            EntityCartItem searchItem = searchIdItem.findItemByIdItem(idProduct);
+            if (searchItem != null) {
+
+                cartService.deleteFromCart(idProduct);
+                Responses deleteResponse = new Responses("Producto eliminado del carrito");
+                return new ResponseEntity<>(deleteResponse, HttpStatus.OK);
+
+            } else {
+                Responses deleteResponse = new Responses("No se encontró el producto en los ítems");
+                return new ResponseEntity<>(deleteResponse, HttpStatus.NOT_FOUND);
+            }
+
         } catch (PersonalExceptions pe) {
             throw new PersonalExceptions(pe.getMessage() + "Error al acceder a la base de datos");
         }

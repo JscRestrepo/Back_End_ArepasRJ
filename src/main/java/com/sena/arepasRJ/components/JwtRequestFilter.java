@@ -15,12 +15,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     /*
     Filtro personalizado para filtrar el token y obtener datos importantes en otras partes del código
      */
+
+    private static final Logger logger = LoggerFactory.getLogger(JwtRequestFilter.class);
 
     @Autowired
     private JwtUtils jwtUtil;
@@ -57,6 +62,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }
         }
+        String authorizationResponse = request.getHeader("Authorization");
+        logger.debug("Authorization Header: {}", authorizationResponse);
+
         filterChain.doFilter(request, response);
     }
 }

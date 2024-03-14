@@ -2,6 +2,7 @@ package com.sena.arepasRJ.controller;
 
 import com.sena.arepasRJ.entity.EntityProducts;
 import com.sena.arepasRJ.exceptions.PersonalExceptions;
+import com.sena.arepasRJ.repository.RepositoryCRUDProducts;
 import com.sena.arepasRJ.responses.Responses;
 import com.sena.arepasRJ.service.ServiceProductsRegister;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,12 +55,19 @@ public class ControllerCRUDProducts {
     @Autowired
     public ServiceProductsRegister deleteProducts;
 
+    @Autowired
+    private RepositoryCRUDProducts searchProducts;
+
     @DeleteMapping("/deleteProduct/{idProduct}")
     public ResponseEntity<?> deleteProductById(@PathVariable Long idProduct) {
+        EntityProducts searchProduct = searchProducts.findByIdProduct(idProduct);
         try {
-            if (deleteProducts.deleteProducts(idProduct)) {
+            if (searchProduct != null) {
+                
+                deleteProducts.deleteProducts(idProduct);
                 Responses okReponse = new Responses("Se eliminó el producto con éxito");
                 return new ResponseEntity<>(okReponse, HttpStatus.OK);
+
             } else {
                 Responses notReponse = new Responses("No se encontró un producto");
                 return new ResponseEntity<>(notReponse, HttpStatus.NOT_FOUND);
@@ -68,7 +76,6 @@ public class ControllerCRUDProducts {
             throw new PersonalExceptions("Ocurrió un error en la red");
         }
     }
-
     /*
     El siguiente método es para actualizar los productos en caso de ser necesario
      */

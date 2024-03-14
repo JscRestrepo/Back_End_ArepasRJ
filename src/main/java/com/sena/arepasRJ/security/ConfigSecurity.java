@@ -64,13 +64,6 @@ public class ConfigSecurity extends WebSecurityConfigurerAdapter  {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
-                .logout() // Configurar el cierre de sesión
-                .logoutUrl("/api/logout")
-                .logoutSuccessHandler((request, response, authentication) -> {
-                    response.setStatus(HttpServletResponse.SC_OK);
-                })
-                .deleteCookies("JWT_TOKEN") // Eliminar cookies al cerrar sesión
-                .and()
                 .cors();
         http.cors();
     }
