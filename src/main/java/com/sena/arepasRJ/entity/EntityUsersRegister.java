@@ -28,7 +28,7 @@ public class EntityUsersRegister {
     private String phone;
     private String address;
     @Enumerated(EnumType.STRING)
-    private UserRole role = UserRole.ADMIN;
+    private UserRole role = UserRole.USER;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "userId", referencedColumnName = "idUser")
