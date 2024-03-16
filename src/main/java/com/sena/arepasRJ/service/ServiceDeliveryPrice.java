@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public class ServiceDeliveryPrice {
@@ -16,14 +17,33 @@ public class ServiceDeliveryPrice {
     private RepositoryDeliveryPrice deliveryRepository;
 
     @Transactional
-    public void addDeliveryPrice(Long idDeliveryPrice, String deliveryAddress, BigDecimal price) {
+    public void addDeliveryPrice(Long idDeliveryPrice, String department, String city,
+                                 String deliveryAddress, BigDecimal price) {
         try {
-            EntityDeliveryPrice deliveryPrice = new EntityDeliveryPrice(idDeliveryPrice, deliveryAddress, price);
+            EntityDeliveryPrice deliveryPrice = new EntityDeliveryPrice(idDeliveryPrice, department,
+                    city, deliveryAddress, price);
             deliveryRepository.save(deliveryPrice);
 
         } catch (PersonalExceptions pe) {
             throw new PersonalExceptions(pe + " Error al acceder a la base de datos");
 
+        }
+    }
+
+    @Transactional
+    public List<EntityDeliveryPrice> getAllPrices() {
+        return deliveryRepository.findAll();
+    }
+
+
+    @Transactional
+    public void deleteDeliveryPrice(Long idDeliveryPrice) throws Exception {
+        try {
+            deliveryRepository.deleteById(idDeliveryPrice);
+        } catch (PersonalExceptions pe) {
+            throw new PersonalExceptions(pe + "Error");
+        } catch (Exception e) {
+            throw new Exception("Error");
         }
     }
 }

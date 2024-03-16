@@ -20,6 +20,8 @@ public class EntityDeliveryPrice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idDeliveryPrice;
 
+    private String department;
+    private String city;
     private String deliveryAddress;
     private BigDecimal deliveryPrice;
 }

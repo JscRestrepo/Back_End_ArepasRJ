@@ -26,13 +26,4 @@ public class EntityDelivery {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idDelivery;
 
-    private BigDecimal subtotalPrice;
-    private BigDecimal totalPrice;
-    private String observations;
-    private String deliveryStatus;
-
-    public EntityDelivery(BigDecimal subtotalPrice, BigDecimal totalPrice) {
-        this.subtotalPrice = subtotalPrice;
-        this.totalPrice = totalPrice;
-    }
 }

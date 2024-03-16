@@ -15,10 +15,5 @@ public interface RepositoryCRUDusers extends JpaRepository<EntityUsersRegister, 
     
     public EntityUsersRegister findUserByIdUsers(Long idUser);
 
-    /*@Query("SELECT NEW OrderDetailsDTO(data.name, data.lastName, data.phone, data.address, order.orderId) " +
-            "FROM EntityUsersRegister data " +
-            "JOIN .")
-    public EntityUsersRegister insert*/
-
     public EntityUsersRegister findByRole(String Role);
 }

@@ -106,7 +106,7 @@ public class ControllerCRUDRegister {
     @Autowired
     private ServiceUsersRegister updateUser;
 
-    @PutMapping("/admin/update/{idUser}")
+    @PutMapping("/update/{idUser}")
     public ResponseEntity<String> updateUser(@PathVariable Long idUser, @RequestBody EntityUsersRegister userUpdated) {
         EntityUsersRegister userExists = updateUser.getUsersById(idUser);
         
@@ -134,7 +134,7 @@ public class ControllerCRUDRegister {
     @Autowired
     private ServiceUsersRegister deleteUser;
     
-    @DeleteMapping("/admin/delete/{idUser}")
+    @DeleteMapping("/delete/{idUser}")
     public ResponseEntity<?> deleteUser(@PathVariable Long idUser) {
         try {
             if (deleteUser.deleteUsers(idUser)) {
