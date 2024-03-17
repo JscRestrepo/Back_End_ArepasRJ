@@ -72,38 +72,29 @@ public class ControllerDeliveryPrice {
 
     @PutMapping("/delivery/update/{idDelivery}")
     public ResponseEntity<?> updateDeliveryPrice(
-            @PathVariable Long idDelivery, @RequestBody EntityDeliveryPrice deliveryPrice) {
+            @PathVariable Long idDelivery, @RequestBody EntityDeliveryPrice updatedDomicilio) {
 
         try {
-            Optional<EntityDeliveryPrice> existingProducts = searchAddressUpdate.findById(idDelivery);
+            Optional<EntityDeliveryPrice> existingDomicilio = searchAddressUpdate.findById(idDelivery);
 
-            if (existingProducts.isPresent()) {
-                EntityDeliveryPrice deliveryPriceUpdate = existingProducts.get();
+            if (existingDomicilio.isPresent()) {
+                EntityDeliveryPrice deliveryPriceUpdate = existingDomicilio.get();
 
-                deliveryPriceUpdate.setDepartment(deliveryPrice.getDepartment());
-                deliveryPriceUpdate.setCity(deliveryPrice.getCity());
-                deliveryPriceUpdate.setDeliveryAddress(deliveryPrice.getDeliveryAddress());
-                deliveryPriceUpdate.setDeliveryPrice(deliveryPrice.getDeliveryPrice());
+                deliveryPriceUpdate.setDeliveryPrice(updatedDomicilio.getDeliveryPrice());
+                deliveryPriceUpdate.setCity(updatedDomicilio.getCity()); // Actualiza la ciudad si la recibe
+                deliveryPriceUpdate.setDeliveryAddress(updatedDomicilio.getDeliveryAddress()); // Actualiza la dirección si la recibe
+                deliveryPriceUpdate.setDepartment(updatedDomicilio.getDepartment()); // Actualiza el departamento si lo recibe
 
                 searchAddressUpdate.save(deliveryPriceUpdate);
 
-                Responses responseUpdate = new Responses("Se actualizó la solicitud con éxito");
+                Responses responseUpdate = new Responses("Se actualizó el precio del domicilio con éxito");
                 return new ResponseEntity<>(responseUpdate, HttpStatus.OK);
             } else {
-
-                Responses responseUpdate = new Responses("La dirección no existe");
+                Responses responseUpdate = new Responses("El domicilio no existe");
                 return new ResponseEntity<>(responseUpdate, HttpStatus.NOT_FOUND);
-
             }
-
-        } catch (PersonalExceptions pe) {
-
-            return new ResponseEntity<>(pe, HttpStatus.INTERNAL_SERVER_ERROR);
-
         } catch (Exception e) {
-
             return new ResponseEntity<>("Error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
-
         }
     }
 
@@ -150,3 +141,56 @@ public class ControllerDeliveryPrice {
     }
 
 }
+
+
+
+ /*
+
+
+
+
+
+@Autowired
+    private RepositoryDeliveryPrice searchAddressUpdate;
+
+    @Autowired
+    private ServiceDeliveryPrice addressService;
+
+
+
+    @PutMapping("/delivery/update/{idDelivery}")
+    public ResponseEntity<?> updateDeliveryPrice(
+            @PathVariable Long idDelivery, @RequestBody EntityDeliveryPrice deliveryPrice) {
+
+        try {
+            Optional<EntityDeliveryPrice> existingProducts = searchAddressUpdate.findById(idDelivery);
+
+            if (existingProducts.isPresent()) {
+                EntityDeliveryPrice deliveryPriceUpdate = existingProducts.get();
+
+                deliveryPriceUpdate.setDepartment(deliveryPrice.getDepartment());
+                deliveryPriceUpdate.setCity(deliveryPrice.getCity());
+                deliveryPriceUpdate.setDeliveryAddress(deliveryPrice.getDeliveryAddress());
+                deliveryPriceUpdate.setDeliveryPrice(deliveryPrice.getDeliveryPrice());
+
+                searchAddressUpdate.save(deliveryPriceUpdate);
+
+                Responses responseUpdate = new Responses("Se actualizó la solicitud con éxito");
+                return new ResponseEntity<>(responseUpdate, HttpStatus.OK);
+            } else {
+
+                Responses responseUpdate = new Responses("La dirección no existe");
+                return new ResponseEntity<>(responseUpdate, HttpStatus.NOT_FOUND);
+
+            }
+
+        } catch (PersonalExceptions pe) {
+
+            return new ResponseEntity<>(pe, HttpStatus.INTERNAL_SERVER_ERROR);
+
+        } catch (Exception e) {
+
+            return new ResponseEntity<>("Error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+    }*/

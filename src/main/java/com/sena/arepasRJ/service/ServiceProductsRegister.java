@@ -2,7 +2,7 @@ package com.sena.arepasRJ.service;
 
 import com.sena.arepasRJ.entity.EntityProducts;
 import com.sena.arepasRJ.exceptions.PersonalExceptions;
-import com.sena.arepasRJ.repository.RepositoryCRUDProducts;
+import com.sena.arepasRJ.repository.RepositoryProducts;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -19,7 +19,7 @@ public class ServiceProductsRegister {
     /*..........................................................................*/
     
     @Autowired
-    private RepositoryCRUDProducts productsRegister;
+    private RepositoryProducts productsRegister;
     
     @Transactional
     public EntityProducts registerPoducts(EntityProducts products, MultipartFile images) {

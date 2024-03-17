@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import com.sena.arepasRJ.repository.RepositoryCRUDusers;
+import com.sena.arepasRJ.repository.RepositoryUsersRegister;
 import com.sena.arepasRJ.repository.RepositoryUsers;
 import java.util.List;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,7 +18,7 @@ public class ServiceUsersRegister {
     /*..........................................................................*/
     
     @Autowired
-    private RepositoryCRUDusers registerRepository;
+    private RepositoryUsersRegister registerRepository;
     
     @Autowired
     private RepositoryUsers userInsert;
@@ -68,17 +68,28 @@ public class ServiceUsersRegister {
     public void updateUsers(Long idUser, String name, String lastName,
             String email, String password, String phone, String address) {
 
-        EntityUsersRegister user = registerRepository.findUserByIdUsers(idUser);
+        EntityUsersRegister userRegister = registerRepository.findUserByIdUsers(idUser);
         String passEncripted = passEncoder.encode(password);
 
-        if (user != null) {
-            user.setName(name);
-            user.setLastName(lastName);
-            user.setEmail(email);
-            user.setPassword(passEncripted);
-            user.setPhone(phone);
-            user.setAddress(address);
-            registerRepository.save(user);
+        /*
+        Se permite cualquier modificación menos el correo, el id y el rol
+         */
+        if (userRegister != null) {
+            userRegister.setName(name);
+            userRegister.setLastName(lastName);
+            userRegister.setPassword(passEncripted);
+            userRegister.setPhone(phone);
+            userRegister.setAddress(address);
+            registerRepository.save(userRegister);
+
+            EntityUsers user = userRegister.getUserSearch();
+
+            /*
+            Al confirmar la modificación, se actualiza la contraseña en la tabla usuarios automáticamente
+             */
+            if (user != null) {
+                user.setPassword(passEncripted);
+            }
         }
     }
     

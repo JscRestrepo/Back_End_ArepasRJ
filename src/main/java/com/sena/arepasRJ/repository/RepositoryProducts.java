@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RepositoryCRUDProducts extends JpaRepository<EntityProducts, Long> {
+public interface RepositoryProducts extends JpaRepository<EntityProducts, Long> {
     
     @Override
     public <S extends EntityProducts> S save (S entity);

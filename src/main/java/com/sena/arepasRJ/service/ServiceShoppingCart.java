@@ -58,7 +58,7 @@ public class ServiceShoppingCart {
     //                          Método para agregar productos al carrito
 
     @Autowired
-    private RepositoryCRUDProducts searchProduct;
+    private RepositoryProducts searchProduct;
 
     @Autowired
     private RepositoryDeliveryPrice shipments;

@@ -2,7 +2,7 @@ package com.sena.arepasRJ.controller;
 
 import com.sena.arepasRJ.entity.EntityProducts;
 import com.sena.arepasRJ.exceptions.PersonalExceptions;
-import com.sena.arepasRJ.repository.RepositoryCRUDProducts;
+import com.sena.arepasRJ.repository.RepositoryProducts;
 import com.sena.arepasRJ.responses.Responses;
 import com.sena.arepasRJ.service.ServiceProductsRegister;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +12,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.swing.text.html.parser.Entity;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-public class ControllerCRUDProducts {
+public class ControllerProducts {
 
     @Autowired
     public ServiceProductsRegister sendProduct;
@@ -56,7 +55,7 @@ public class ControllerCRUDProducts {
     public ServiceProductsRegister deleteProducts;
 
     @Autowired
-    private RepositoryCRUDProducts searchProducts;
+    private RepositoryProducts searchProducts;
 
     @DeleteMapping("/deleteProduct/{idProduct}")
     public ResponseEntity<?> deleteProductById(@PathVariable Long idProduct) {

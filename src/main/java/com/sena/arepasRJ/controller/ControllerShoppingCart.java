@@ -29,9 +29,11 @@ public class ControllerShoppingCart {
     @PostMapping("/addCart/{idProduct}/{quantityProducts}/{idDeliveryPrice}")
     public ResponseEntity<?> saveToCart (@PathVariable Long idProduct, @PathVariable int quantityProducts, @PathVariable Long idDeliveryPrice) {
         try {
+
             cartService.addProductsToCart(idProduct, quantityProducts, idDeliveryPrice);
             Responses addedResponse = new Responses("Se agregó el producto al carrito");
             return new ResponseEntity<>(addedResponse, HttpStatus.OK);
+
         } catch (PersonalExceptions pe) {
             throw new PersonalExceptions(pe.getMessage() + "No se pudo conectar a la base de datos");
         }
@@ -47,6 +49,7 @@ public class ControllerShoppingCart {
     @DeleteMapping("/deleteFromCart/{idProduct}")
     public ResponseEntity<?> deleteFromCart (@PathVariable Long idProduct) {
         try {
+
             EntityCartItem searchItem = searchIdItem.findItemByIdItem(idProduct);
             if (searchItem != null) {
 
@@ -67,6 +70,7 @@ public class ControllerShoppingCart {
     @GetMapping("/seeUserCart")
     public ResponseEntity<EntityShoppingCart> seeShoppingCart() {
         try {
+
             EntityShoppingCart userCart = cartService.getCar();
             return ResponseEntity.ok(userCart);
 
@@ -84,8 +88,10 @@ public class ControllerShoppingCart {
     @GetMapping("/shoppingPage")
     public ResponseEntity<?> userProductPage() {
         try {
+
             EntityShoppingCart userCart = cartService.getCar();
             return ResponseEntity.ok(userCart);
+
         } catch (PersonalExceptions pe) {
             throw new PersonalExceptions(pe + "Error al acceder a la base de datos");
         }
