@@ -1,5 +1,6 @@
 package com.sena.arepasRJ.controller;
 
+import com.sena.arepasRJ.components.JwtUtils;
 import com.sena.arepasRJ.service.ServiceUsersRegister;
 import com.sena.arepasRJ.entity.EntityUsersRegister;
 import com.sena.arepasRJ.exceptions.PersonalExceptions;
@@ -142,37 +143,6 @@ public class ControllerUsersRegister {
             } else {
                 Responses notResponse = new Responses("No se encontró un usuario");
                 return new ResponseEntity<>(notResponse, HttpStatus.NOT_FOUND);
-            }
-        } catch (PersonalExceptions e) {
-            throw new PersonalExceptions("Error al acceder a la base de datos");
-        }
-    }
-
-    /*..........................................................................*/    
-    
-    /*
-    Por último tenemos el Controlador de leer los datos de nuestro usuarios
-    que nos permite ver la información tomada por medio de un Id
-    */
-    
-    /*..........................................................................*/
-    
-    @GetMapping("/users")
-    public ResponseEntity<List<EntityUsersRegister>> getAllUsers() {
-        List<EntityUsersRegister> users = registerUsers.getAllUsers();
-        return new ResponseEntity<>(users, HttpStatus.OK);
-    }
-    
-    @GetMapping("/users/{idUser}")
-    public ResponseEntity<?> getUsersById(@PathVariable Long idUser) {
-        EntityUsersRegister user = registerUsers.getUsersById(idUser);
-        try {
-            if (user != null) {
-                return new ResponseEntity<>(user, HttpStatus.OK);
-            } else {
-                Responses readResponse = new Responses("No se encontró"
-                        + "ningún usuario registrado con ese ID");
-                return new ResponseEntity<>(readResponse, HttpStatus.NOT_FOUND);
             }
         } catch (PersonalExceptions e) {
             throw new PersonalExceptions("Error al acceder a la base de datos");

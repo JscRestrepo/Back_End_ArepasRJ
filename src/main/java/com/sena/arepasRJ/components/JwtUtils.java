@@ -1,6 +1,10 @@
 package com.sena.arepasRJ.components;
 
+import com.sena.arepasRJ.entity.EntityUsersRegister;
+import com.sena.arepasRJ.repository.RepositoryUsers;
+import com.sena.arepasRJ.repository.RepositoryUsersRegister;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -80,7 +84,26 @@ public class JwtUtils {
         return extractClaim(token, Claims::getSubject);
     }
 
+    public static String extractRole(String token) {
+        return extractClaim(token, claims -> claims.get("role", String.class));
+    }
+
     private static Claims extractAllClaims(String token) {
         return Jwts.parser().setSigningKey(secretKeyString).parseClaimsJws(token).getBody();
+    }
+
+
+    public static EntityUsersRegister validateTokenWithUser(String token, RepositoryUsersRegister getEmail) {
+        try {
+            Claims claims = Jwts.parser().setSigningKey(secretKeyString).parseClaimsJws(token).getBody();
+            String email = claims.getSubject();
+            String role = (String) claims.get("role");
+
+            EntityUsersRegister user = getEmail.findByEmailContainingIgnoreCase(email);
+
+            return user;
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

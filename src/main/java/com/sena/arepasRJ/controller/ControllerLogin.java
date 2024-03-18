@@ -4,15 +4,13 @@ import com.sena.arepasRJ.components.JwtUtils;
 import com.sena.arepasRJ.components.UserRole;
 import com.sena.arepasRJ.entity.EntityUsers;
 import com.sena.arepasRJ.entity.EntityUsersRegister;
+import com.sena.arepasRJ.repository.RepositoryUsersRegister;
 import com.sena.arepasRJ.responses.Responses;
 import com.sena.arepasRJ.service.ServiceLogin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class ControllerLogin {
@@ -90,6 +88,24 @@ public class ControllerLogin {
                 Responses loginResponse = new Responses(welcomeMessage + " tu token es: " + token);
                 return new ResponseEntity<>(loginResponse, HttpStatus.OK);
             }
+        }
+    }
+
+    @Autowired
+    private RepositoryUsersRegister getEmail;
+
+    @GetMapping("/getUser")
+    public ResponseEntity<?> getUserWithToken(@RequestHeader("Authorization") String authorizationHeader) {
+        String token = authorizationHeader.substring(7); //Se elimina el prefijo "Bearer"
+
+        //Generar la validación del token
+        EntityUsersRegister getUser = JwtUtils.validateTokenWithUser(token, getEmail);
+
+        if (getUser != null) {
+            return new ResponseEntity<>(getUser, HttpStatus.OK);
+        } else {
+            Responses notUserResponse = new Responses("El token no es válido o ya expiró");
+            return new ResponseEntity<>(notUserResponse, HttpStatus.NOT_FOUND);
         }
     }
 }

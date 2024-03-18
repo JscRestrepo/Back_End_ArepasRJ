@@ -1,5 +1,6 @@
 package com.sena.arepasRJ.controller;
 
+import com.sena.arepasRJ.components.UserRole;
 import com.sena.arepasRJ.entity.EntityUsersRegister;
 import com.sena.arepasRJ.exceptions.PersonalExceptions;
 import com.sena.arepasRJ.repository.RepositoryUsersRegister;
@@ -7,14 +8,11 @@ import com.sena.arepasRJ.service.ServiceButtonRoleModify;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/api/modify-role-button")
 public class ControllerButtonRoleModify {
 
@@ -50,6 +48,20 @@ public class ControllerButtonRoleModify {
 
             throw new Exception("Ocurrió un error inesperado " + e);
 
+        }
+    }
+
+    @Autowired
+    private ServiceButtonRoleModify updateRole;
+
+    @PutMapping("/newRole/{email}")
+    public ResponseEntity<?> updateNewRole(@PathVariable String email, @RequestParam UserRole newRole){
+        try {
+            updateRole.roleModify(email, newRole);
+            return ResponseEntity.ok("El rol de " + email + " fue actualizado con éxito");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Ocurrió un error en la modificación: " + e.getMessage());
         }
     }
 }

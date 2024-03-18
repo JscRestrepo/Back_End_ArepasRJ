@@ -21,6 +21,8 @@ public interface RepositoryUsersRegister extends JpaRepository<EntityUsersRegist
 
     public EntityUsersRegister findByEmailContainingIgnoreCase(String email); //Método para buscar el error sin tener en cuenta mayúsculas y minúsculas
 
+    public EntityUsersRegister findByRole(String Role);
+
     /*
     Método para buscar los datos específicos de la lista solicitada
     En este caso es la lista que se muestra cuando se busca un usuario para
