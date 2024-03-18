@@ -4,6 +4,7 @@ import com.sena.arepasRJ.entity.EntityUsers;
 import com.sena.arepasRJ.entity.EntityUsersRegister;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -25,6 +26,6 @@ public interface RepositoryUsersRegister extends JpaRepository<EntityUsersRegist
     En este caso es la lista que se muestra cuando se busca un usuario para
     modificar su rol
      */
-    @Query("SELECT u.name, u.email, u.role FROM EntityUsersRegister u")
-    List<Object[]> findAllUsersWithSpecificData();
+    @Query("SELECT u.name, u.email, u.role FROM EntityUsersRegister u WHERE u.email = :email")
+    List<Object[]> findAllUsersWithSpecificData(@Param("email") String email);
 }

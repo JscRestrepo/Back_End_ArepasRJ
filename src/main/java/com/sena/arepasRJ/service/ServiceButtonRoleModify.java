@@ -25,7 +25,7 @@ public class ServiceButtonRoleModify {
     /*
     Después se almacena en una lista que va a retornar únicamente los valores solicitados
      */
-    public List<Object[]> getUserDataSelected() {
-        return userSearch.findAllUsersWithSpecificData();
+    public List<Object[]> getUserDataSelected(String email) {
+        return userSearch.findAllUsersWithSpecificData(email);
     }
 }

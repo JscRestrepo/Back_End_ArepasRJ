@@ -34,7 +34,7 @@ public class ControllerButtonRoleModify {
             EntityUsersRegister userExists = userGet.findByEmailContainingIgnoreCase(email); //Este método busca el usuario sin tener en cuenta mayúsuclas y minúsculas
 
             if (userExists != null) {
-                List<Object[]> returnObjects = getButton.getUserDataSelected(); //Aunque se podía enviar directamente el objeto dentro de la respuesta, prefiero enviarla en una lista para manejar mejor futuros cambios en el código
+                List<Object[]> returnObjects = getButton.getUserDataSelected(email); //Aunque se podía enviar directamente el objeto dentro de la respuesta, prefiero enviarla en una lista para manejar mejor futuros cambios en el código
                 return new ResponseEntity<>(returnObjects, HttpStatus.OK);
 
             } else {
