@@ -24,6 +24,7 @@ public class EntityProducts {
     private String productName;
     private String productDescription;
     private BigDecimal unityPrice;
+    private int quantity;
 
     @Lob
     private byte[] image;

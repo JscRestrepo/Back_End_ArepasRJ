@@ -39,7 +39,7 @@ public class ControllerProducts {
         newProduct.setProductName(productName);
         newProduct.setProductDescription(productDescription);
         newProduct.setUnityPrice(unityPrice);
-
+        newProduct.setQuantity(1);
 
         sendProduct.registerPoducts(newProduct, imageFile);
 
