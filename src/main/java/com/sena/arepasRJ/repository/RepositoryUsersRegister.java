@@ -1,6 +1,5 @@
 package com.sena.arepasRJ.repository;
 
-import com.sena.arepasRJ.entity.EntityUsers;
 import com.sena.arepasRJ.entity.EntityUsersRegister;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

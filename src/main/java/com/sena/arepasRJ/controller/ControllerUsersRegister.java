@@ -1,6 +1,7 @@
 package com.sena.arepasRJ.controller;
 
 import com.sena.arepasRJ.components.JwtUtils;
+import com.sena.arepasRJ.components.UserRole;
 import com.sena.arepasRJ.service.ServiceUsersRegister;
 import com.sena.arepasRJ.entity.EntityUsersRegister;
 import com.sena.arepasRJ.exceptions.PersonalExceptions;
@@ -9,28 +10,31 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
 public class ControllerUsersRegister {
-    
+
     /*..........................................................................*/
-    
+
     /*
     En primer lugar se encuentra el Registro de usuario donde se maneja la
     lógica de validaciones e inserción de nuevos usuarios
     */
-    
+
     /*..........................................................................*/
 
     @Autowired
     private ServiceUsersRegister registerUsers;
-    
+
+    private EntityUsersRegister getRole = new EntityUsersRegister();
+
 
     @PostMapping("/login/register")
     public ResponseEntity<?> userSave(@RequestBody EntityUsersRegister user) {
-        
+
         try {
             if (nameAndLasNameValidation(user)) {
 
@@ -72,12 +76,12 @@ public class ControllerUsersRegister {
 
     }
 
-    //Validación de que el nombre solo contenga letras
+    //Validación de que el nombre solo contenga letra
     public Boolean nameAndLasNameValidation(EntityUsersRegister user) {
         String name = user.getName();
         String lastName = user.getLastName();
         String numbersSearch = ".*\\d.*"; //Atributo para buscar números
-        
+
         return !name.matches(numbersSearch) && !lastName.matches(numbersSearch); //Se busca que no tenga números ni el nombre ni el apellido
     }
 
@@ -90,50 +94,57 @@ public class ControllerUsersRegister {
 
     public Boolean emailValidation(EntityUsersRegister user) {
         String regexEmail = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$";
-        
+
         return user.getEmail().matches(regexEmail);
     }
-    
+
     /*..........................................................................*/
-    
+
     /*
-    En segundo lugar se encuentra el controlador que ejecuta la modificación de 
+    En segundo lugar se encuentra el controlador que ejecuta la modificación de
     datos del usuario y ejecuta la acción exitosamente en la base de datos
     */
-    
+
     /*..........................................................................*/
-    
+
     @Autowired
     private ServiceUsersRegister updateUser;
 
-    @PutMapping("/update/{idUser}")
-    public ResponseEntity<String> updateUser(@PathVariable Long idUser, @RequestBody EntityUsersRegister userUpdated) {
-        EntityUsersRegister userExists = updateUser.getUsersById(idUser);
-        
-        if (userExists != null) {
-            updateUser.updateUsers(idUser, userUpdated.getName(), 
-                    userUpdated.getLastName(),
-                    userUpdated.getEmail(), userUpdated.getPassword(), 
+    @PutMapping("/update/{email}")
+    public ResponseEntity<?> updateUser(@PathVariable String email, @RequestBody EntityUsersRegister userUpdated) {
+        try {
+            updateUser.updateUsers(email, userUpdated.getName(), userUpdated.getLastName(),
                     userUpdated.getPhone(), userUpdated.getAddress());
-            
+
             return new ResponseEntity<>("El usuario se actualizó exitosamente", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("El usuario que busca actualizar no existe", HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            Responses errorResponse = new Responses("Error al actualizar el usuario: " + e.getMessage());
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    
+
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<?> newUserToken(@RequestBody UserDetails userDetails) {
+        final String email = userDetails.getUsername();
+        UserRole role = getRole.getRole();
+        final String token = JwtUtils.generationToken(email, role.toString());
+
+        return ResponseEntity.ok(token);
+    }
+
     /*..........................................................................*/
-    
+
     /*
     En tercer lugar se encuentra el controlador de eliminación de datos, donde podemos
     eliminar usuarios por su Id y ejecuta la acción con la base de datos
     */
-    
+
     /*..........................................................................*/
-    
+
     @Autowired
     private ServiceUsersRegister deleteUser;
-    
+
     @DeleteMapping("/delete/{idUser}")
     public ResponseEntity<?> deleteUser(@PathVariable Long idUser) {
         try {

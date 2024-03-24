@@ -41,8 +41,8 @@ public class ServiceButtonRoleModify {
 
     @Transactional
     public void roleModify(String email, UserRole newRole) {
-        EntityUsersRegister userSearch = searchUserRole.findByEmailContainingIgnoreCase(email);
-        EntityUsers userModify = updateUserRole.findUsersByEmail(email);
+        EntityUsersRegister userSearch = searchUserRole.findByEmailContainingIgnoreCase(email); //Se busca el email del usuario
+        EntityUsers userModify = updateUserRole.findUsersByEmail(email); //También se busca la coincidencia en la tabla users
 
         if (userSearch == null) {
             throw new RuntimeException("No se encontró ningún usuario");

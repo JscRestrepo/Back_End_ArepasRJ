@@ -22,7 +22,7 @@ public class ServiceUsersRegister {
     
     @Autowired
     private RepositoryUsers userInsert;
-    
+
     @Autowired
     private PasswordEncoder passEncoder;
     
@@ -63,36 +63,31 @@ public class ServiceUsersRegister {
     }
     
     /*..........................................................................*/
-    
+
     @Transactional
-    public void updateUsers(Long idUser, String name, String lastName,
-            String email, String password, String phone, String address) {
+    public void updateUsers(String email, String name, String lastName, String phone, String address) {
+        EntityUsersRegister userRegister = registerRepository.findByEmailContainingIgnoreCase(email);
 
-        EntityUsersRegister userRegister = registerRepository.findUserByIdUsers(idUser);
-        String passEncripted = passEncoder.encode(password);
-
-        /*
-        Se permite cualquier modificación menos el correo, el id y el rol
-         */
         if (userRegister != null) {
-            userRegister.setName(name);
-            userRegister.setLastName(lastName);
-            userRegister.setPassword(passEncripted);
-            userRegister.setPhone(phone);
-            userRegister.setAddress(address);
-            registerRepository.save(userRegister);
-
-            EntityUsers user = userRegister.getUserSearch();
-
-            /*
-            Al confirmar la modificación, se actualiza la contraseña en la tabla usuarios automáticamente
-             */
-            if (user != null) {
-                user.setPassword(passEncripted);
+            // Actualizar los campos especificados
+            if (name != null && !name.isEmpty()) {
+                userRegister.setName(name);
             }
+            if (lastName != null && !lastName.isEmpty()) {
+                userRegister.setLastName(lastName);
+            }
+            if (phone != null && !phone.isEmpty()) {
+                userRegister.setPhone(phone);
+            }
+            if (address != null && !address.isEmpty()) {
+                userRegister.setAddress(address);
+            }
+
+            // Guardar los cambios
+            registerRepository.save(userRegister);
         }
     }
-    
+
     /*..........................................................................*/
     
     @Transactional(readOnly = true)
@@ -101,7 +96,7 @@ public class ServiceUsersRegister {
     }
     
     @Transactional(readOnly = true)
-    public EntityUsersRegister getUsersById(Long idUser) {
-        return registerRepository.findUserByIdUsers(idUser);
+    public EntityUsersRegister getUsersByEmail(String email) {
+        return registerRepository.findByEmailContainingIgnoreCase(email);
     }
 }
