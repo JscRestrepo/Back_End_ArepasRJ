@@ -27,7 +27,7 @@ public class ControllerProducts {
     Primero se crea el método para insertar los datos de los productos en la base de datos.
     */
 
-    @PostMapping("/admin/regProduct")
+    @PostMapping("/regProduct")
     public ResponseEntity<?> saveProducts(
             @RequestParam("name") String productName,
             @RequestParam("description") String productDescription,
