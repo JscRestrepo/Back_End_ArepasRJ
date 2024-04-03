@@ -55,10 +55,10 @@ public class ControllerBuy {
     @Autowired
     private ServiceBuy getUserBuy;
 
-    @GetMapping("/user/get-buy/{email}")
-    public ResponseEntity<List<EntityBuy>> getBuyById(@PathVariable String email){
+    @GetMapping("/user/get-buy/{userEmail}")
+    public ResponseEntity<List<EntityBuy>> getBuyById(@PathVariable String userEmail){
         try {
-            List<EntityBuy> getBuy = getUserBuy.readUsersBuy(email);
+            List<EntityBuy> getBuy = getUserBuy.readUsersBuy(userEmail);
             return new ResponseEntity<>(getBuy, HttpStatus.OK);
         } catch (PersonalExceptions pe) {
             throw new PersonalExceptions(pe + "Error al acceder a la base de datos. Contacte con el servidor");
