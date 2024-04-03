@@ -35,5 +35,5 @@ public class EntityBuy {
     private String commune;
     private String address;
     private String orderStatus;
-
+    private String userEmail;
 }
