@@ -27,7 +27,7 @@ public class ControllerProducts {
     Primero se crea el método para insertar los datos de los productos en la base de datos.
     */
 
-    @PostMapping("/regProduct")
+    @PostMapping("/admin/regProduct")
     public ResponseEntity<?> saveProducts(
             @RequestParam("name") String productName,
             @RequestParam("description") String productDescription,
@@ -57,7 +57,7 @@ public class ControllerProducts {
     @Autowired
     private RepositoryProducts searchProducts;
 
-    @DeleteMapping("/deleteProduct/{idProduct}")
+    @DeleteMapping("/admin/deleteProduct/{idProduct}")
     public ResponseEntity<?> deleteProductById(@PathVariable Long idProduct) {
         EntityProducts searchProduct = searchProducts.findByIdProduct(idProduct);
         try {
@@ -82,7 +82,7 @@ public class ControllerProducts {
     @Autowired
     public ServiceProductsRegister updateProducts;
 
-    @PutMapping("/updateProduct/{idProduct}")
+    @PutMapping("/admin/updateProduct/{idProduct}")
     public ResponseEntity<?> productsUpdate(
             @PathVariable Long idProduct,
             @RequestParam("productName") String productName,

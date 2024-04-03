@@ -1,10 +1,7 @@
 package com.sena.arepasRJ.controller;
 
 import com.sena.arepasRJ.entity.EntityBuy;
-import com.sena.arepasRJ.entity.EntityUsers;
 import com.sena.arepasRJ.exceptions.PersonalExceptions;
-import com.sena.arepasRJ.repository.RepositoryBuy;
-import com.sena.arepasRJ.repository.RepositoryUsers;
 import com.sena.arepasRJ.responses.Responses;
 import com.sena.arepasRJ.service.ServiceBuy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.List;
 
 @RestController
@@ -22,7 +18,7 @@ public class ControllerBuy {
     @Autowired
     private ServiceBuy saveBuy;
 
-    @PostMapping("/buy")
+    @PostMapping("/user/buy")
     public ResponseEntity<?> executeBuy(@RequestBody EntityBuy setBuy) {
         try {
             saveBuy.saveProducts(setBuy);
@@ -41,7 +37,7 @@ public class ControllerBuy {
     @Autowired
     private ServiceBuy getBuy;
 
-    @GetMapping("/get-buy")
+    @GetMapping("/admin/get-buy")
     public ResponseEntity<List<EntityBuy>> getAllBuys() {
         try {
             List<EntityBuy> getAllBuys = getBuy.readBuy();
@@ -59,7 +55,7 @@ public class ControllerBuy {
     @Autowired
     private ServiceBuy getUserBuy;
 
-    @GetMapping("/get-buy/{email}")
+    @GetMapping("/user/get-buy/{email}")
     public ResponseEntity<List<EntityBuy>> getBuyById(@PathVariable String email){
         try {
             List<EntityBuy> getBuy = getUserBuy.readUsersBuy(email);
