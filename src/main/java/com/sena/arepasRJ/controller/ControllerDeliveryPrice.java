@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/admin")
+@RequestMapping("/api")
 public class ControllerDeliveryPrice {
 
     /*
@@ -27,7 +27,7 @@ public class ControllerDeliveryPrice {
     @Autowired
     private ServiceDeliveryPrice addDeliveryPrice;
 
-    @PostMapping("/delivery/save")
+    @PostMapping("/admin/delivery/save")
     public ResponseEntity<?> saveDeliveryPrice(@RequestBody EntityDeliveryPrice deliveryPrice) {
         try {
             if (!addresExists(deliveryPrice)) {
@@ -70,7 +70,7 @@ public class ControllerDeliveryPrice {
     @Autowired
     private ServiceDeliveryPrice addressService;
 
-    @PutMapping("/delivery/update/{idDelivery}")
+    @PutMapping("/admin/delivery/update/{idDelivery}")
     public ResponseEntity<?> updateDeliveryPrice(
             @PathVariable Long idDelivery, @RequestBody EntityDeliveryPrice updatedDomicilio) {
 
@@ -110,7 +110,7 @@ public class ControllerDeliveryPrice {
     @Autowired
     private ServiceDeliveryPrice deleteProducts;
 
-    @DeleteMapping("/delivery/delete/{idDeliveryPrice}")
+    @DeleteMapping("/admin/delivery/delete/{idDeliveryPrice}")
     public ResponseEntity<?> deleteDeliveryPrice(@PathVariable Long idDeliveryPrice) throws Exception {
         EntityDeliveryPrice getAddress = searchAddressDelete.findAddressByIdDeliveryPrice(idDeliveryPrice);
 

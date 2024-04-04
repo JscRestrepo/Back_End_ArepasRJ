@@ -1,7 +1,6 @@
 package com.sena.arepasRJ.service;
 
 import com.sena.arepasRJ.entity.EntityBuy;
-import com.sena.arepasRJ.entity.EntityUsers;
 import com.sena.arepasRJ.repository.RepositoryBuy;
 import com.sena.arepasRJ.repository.RepositoryUsers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +21,16 @@ public class ServiceBuy {
     }
 
     @Transactional
+    public void updateOrderStatus(Long idBuy, String orderStatus) {
+        EntityBuy searchBuy = saveBuy.findById(idBuy).orElse(null);
+
+        if (searchBuy != null) {
+            searchBuy.setOrderStatus(orderStatus);
+            saveBuy.save(searchBuy);
+        }
+    }
+
+    @Transactional
     public List<EntityBuy> readBuy() {
         return saveBuy.findAll();
     }
@@ -30,7 +39,6 @@ public class ServiceBuy {
     private RepositoryUsers getUser;
 
     public List<EntityBuy> readUsersBuy(String email) {
-        // Obtener todas las compras realizadas por el usuario con el correo electrónico dado
-        return saveBuy.findListBuyByUserEmail(email);
+        return saveBuy.findListBuyByEmail(email);
     }
 }

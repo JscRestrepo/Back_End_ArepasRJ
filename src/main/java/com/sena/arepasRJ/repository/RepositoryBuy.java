@@ -8,7 +8,5 @@ import java.util.List;
 
 @Repository
 public interface RepositoryBuy extends JpaRepository<EntityBuy, Long> {
-    public EntityBuy findBuyByUserEmail(String userEmail);
-
-    public List<EntityBuy> findListBuyByUserEmail(String userEmail);
+    public List<EntityBuy> findListBuyByEmail(String email);
 }

@@ -2,6 +2,7 @@ package com.sena.arepasRJ.controller;
 
 import com.sena.arepasRJ.entity.EntityBuy;
 import com.sena.arepasRJ.exceptions.PersonalExceptions;
+import com.sena.arepasRJ.repository.RepositoryBuy;
 import com.sena.arepasRJ.responses.Responses;
 import com.sena.arepasRJ.service.ServiceBuy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,21 @@ public class ControllerBuy {
         }
     }
 
+    @Autowired
+    private ServiceBuy getIdBuy;
+
+    @PutMapping("/admin/status-buy/modify/{idBuy}")
+    public ResponseEntity<?> updateBuyStatus(@PathVariable Long idBuy,
+                                             @RequestParam("orderStatus") String orderStatus) {
+        try {
+            getIdBuy.updateOrderStatus(idBuy, orderStatus);
+            System.out.println(orderStatus);
+            Responses okResponse = new Responses("Estado de orden actualizado con éxito");
+            return new ResponseEntity(okResponse, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar el estado de la orden.");
+        }
+    }
 
     /*
     Traer todas las compras para la lista de admin
@@ -55,10 +71,10 @@ public class ControllerBuy {
     @Autowired
     private ServiceBuy getUserBuy;
 
-    @GetMapping("/user/get-buy/{userEmail}")
-    public ResponseEntity<List<EntityBuy>> getBuyById(@PathVariable String userEmail){
+    @GetMapping("/user/get-buy/{email}")
+    public ResponseEntity<List<EntityBuy>> getBuyById(@PathVariable String email){
         try {
-            List<EntityBuy> getBuy = getUserBuy.readUsersBuy(userEmail);
+            List<EntityBuy> getBuy = getUserBuy.readUsersBuy(email);
             return new ResponseEntity<>(getBuy, HttpStatus.OK);
         } catch (PersonalExceptions pe) {
             throw new PersonalExceptions(pe + "Error al acceder a la base de datos. Contacte con el servidor");
